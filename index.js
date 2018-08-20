@@ -1,6 +1,13 @@
-'use strict';
+/* eslint-disable  func-names */
+/* eslint quote-props: ["error", "consistent"]*/
 
+'use strict';
 const Alexa = require('alexa-sdk');
+
+//=========================================================================================================================================
+// Global Data
+//=========================================================================================================================================
+
 const APP_ID = 'amzn1.ask.skill.f3656c04-186d-4ba6-b62f-294c2f1a9db8';
 
 const flashcardsDictionary = [
@@ -57,6 +64,15 @@ const flashcardsDictionary = [
 ];
 
 var DECK_LENGTH = flashcardsDictionary.length;
+
+const SKILL_NAME = 'State Capitals Quiz';
+const HELP_MESSAGE = 'You can say... fuck, ask the dev what to say'; // TODO
+const HELP_REPROMPT = 'What can I help you with?';
+const STOP_MESSAGE = 'Peace out my dude!';
+
+//=========================================================================================================================================
+// Do logic here
+//=========================================================================================================================================
 
 var handlers = {
 

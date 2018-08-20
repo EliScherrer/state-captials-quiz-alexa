@@ -1,0 +1,22 @@
+{
+  "name": "state-captials",
+  "version": "1.0.0",
+  "description": "state captials quiz alexa skill",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/EliScherrer/state-captials-quiz-alexa.git"
+  },
+  "author": "Eli Scherrer",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/EliScherrer/state-captials-quiz-alexa/issues"
+  },
+  "homepage": "https://github.com/EliScherrer/state-captials-quiz-alexa#readme",
+  "dependencies": {
+    "alexa-sdk": "^1.0.25"
+  }
+}
