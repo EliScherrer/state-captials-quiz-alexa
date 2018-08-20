@@ -1,5 +1,5 @@
 {
-  "name": "state-captials",
+  "name": "state-captials-quiz",
   "version": "1.0.0",
   "description": "state captials quiz alexa skill",
   "main": "index.js",
@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/EliScherrer/state-captials-quiz-alexa#readme",
   "dependencies": {
-    "alexa-sdk": "^1.0.25"
+    "alexa-sdk": "^1.0.25",
+    "jshint": "^2.9.6"
   }
 }

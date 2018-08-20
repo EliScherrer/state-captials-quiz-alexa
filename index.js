@@ -87,22 +87,23 @@ var handlers = {
       this.response.speak().listen(AskQuestion);
     }
     else {
-      var currentIndex = this.attributes.currentFlashcardIndex;
-      var numberCorrect = this.attributes.numberCorrect;
+      var currentIndex = this.attributes.currentFlashcardIndex || 0;
+      var numberCorrect = this.attributes.numberCorrect || 0;
       this.response
         .speak('Welcome back to Flashcards. You are on question' + currentIndex + 
               'and have answered' + numberCorrect + ' correctly.' +
               'the next question is... ' + AskQuestion(this.attributes))
         .listen(AskQuestion(this.attributes));
     }
+    this.emit(':responseReady');
   },
 
   // User gives an answer
   'AnswerIntent': function() {
     var currentFlashcardIndex = this.attributes.currentFlashcardIndex;
-    var currentState = flashcardsDictionary[currentFlashcardIndex]['state'];
+    var currentState = flashcardsDictionary[currentFlashcardIndex].state;
     var userAnswer = this.event.request.intent.slots.answer.value;
-    var correctAnswer = flashcardsDictionary[currentFlashcardIndex]['capital'];
+    var correctAnswer = flashcardsDictionary[currentFlashcardIndex].capital;
 
     // user is correct
     if (userAnswer === correctAnswer) {
