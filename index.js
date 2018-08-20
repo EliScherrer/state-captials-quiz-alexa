@@ -10,7 +10,7 @@ const Alexa = require('alexa-sdk');
 
 const APP_ID = 'amzn1.ask.skill.f3656c04-186d-4ba6-b62f-294c2f1a9db8';
 
-const flashcardsDictionary = [
+const statesAndCaptials = [
   { state: "Alabama", capital: "Montgomery" },
   { state: "Alaska", capital: "Juneau"},
   { state: "Arizona", capital: "Phoenix"},
@@ -63,7 +63,7 @@ const flashcardsDictionary = [
   { state: "Wyoming", capital: "Cheyenne" }
 ];
 
-var DECK_LENGTH = flashcardsDictionary.length;
+var DECK_LENGTH = statesAndCaptials.length;
 
 const SKILL_NAME = 'State Capitals Quiz';
 const HELP_MESSAGE = 'You can say... fuck, ask the dev what to say'; // TODO
@@ -78,32 +78,35 @@ var handlers = {
 
   // Open Codecademy Flashcards
   'LaunchRequest': function() {
-    //new user
+
+    // if new user
     if (Object.keys(this.attributes).length === 0) {
-      this.attributes = {
-        'numberCorrect': 0,
-        'currentFlashcardIndex': 0
-      };
-      this.response.speak().listen(AskQuestion);
+      this.attributes.numberCorrect = 0;
+      this.attributes.currentFlashcardIndex = 0;
+
+      this.response
+        .speak('Welcome to the state capitals quiz. ' + AskQuestion(this.attributes))
+        .listen(AskQuestion(this.attributes));
     }
     else {
       var currentIndex = this.attributes.currentFlashcardIndex || 0;
       var numberCorrect = this.attributes.numberCorrect || 0;
       this.response
-        .speak('Welcome back to Flashcards. You are on question' + currentIndex + 
-              'and have answered' + numberCorrect + ' correctly.' +
-              'the next question is... ' + AskQuestion(this.attributes))
-        .listen(AskQuestion(this.attributes));
+        .speak('Welcome back to the state capitals quiz. You are on question ' + currentIndex + 
+              ' and have answered ' + numberCorrect + ' correctly. ' +
+              'The next question is... ' + AskQuestion(this.attributes))
+        .listen('i\'ve been listening... ');
     }
+    this.emit(':saveState', true);
     this.emit(':responseReady');
   },
 
   // User gives an answer
   'AnswerIntent': function() {
-    var currentFlashcardIndex = this.attributes.currentFlashcardIndex;
-    var currentState = flashcardsDictionary[currentFlashcardIndex].state;
-    var userAnswer = this.event.request.intent.slots.answer.value;
-    var correctAnswer = flashcardsDictionary[currentFlashcardIndex].capital;
+    var currentFlashcardIndex = this.attributes['currentFlashcardIndex'];
+    var currentState = statesAndCaptials[currentFlashcardIndex].state;
+    var userAnswer = this.event.request.intent.slots.answer.value || 'suck';
+    var correctAnswer = statesAndCaptials[currentFlashcardIndex].capital || 'suck';
 
     // user is correct
     if (userAnswer === correctAnswer) {
@@ -121,19 +124,22 @@ var handlers = {
           '. The next question is... ' + AskQuestion(this.attributes)) 
         .listen(AskQuestion(this.attributes));
     }
-    
+
+    this.emit(':saveState', true);
     this.emit(':responseReady');
   },
 
   // Stop
   'AMAZON.StopIntent': function() {
       this.response.speak('Ok, let\'s play again soon.');
+      this.emit(':saveState', true);
       this.emit(':responseReady');
   },
 
   // Cancel
   'AMAZON.CancelIntent': function() {
       this.response.speak('Ok, let\'s play again soon.');
+      this.emit(':saveState', true);
       this.emit(':responseReady');
   },
 
@@ -147,9 +153,9 @@ var handlers = {
 
 var AskQuestion = function(attributes) {
     var currentFlashcardIndex = attributes.currentFlashcardIndex;
-    var currentState = flashcardsDictionary[currentFlashcardIndex].state;
+    var currentState = statesAndCaptials[currentFlashcardIndex].state;
 
-    return 'What is the capital of ' + currentState + '?';
+    return ('What is the capital of ' + currentState + '?');
 };
 
 exports.handler = function(event, context, callback){
